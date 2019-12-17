@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- custom하게 만들어줄 attribute 설정-->
+    <!--이곳에서 정의해주면 R.styleable에 정의되고 사용할 수 있음-->
+    <!--R.id.time/score/speed 빨간줄 없어짐 -> why????????????????????????-->
+    <declare-styleable name="TileView">
+        <attr name="tileSize" format="integer" />
+    </declare-styleable>
+    <!--선언한 후 사용하겠다? -> declare-styleable-->
+</resources>
