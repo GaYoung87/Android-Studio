@@ -1,6 +1,7 @@
 package com.example.snake;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -109,5 +110,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onLeftClicked(View v) {
         mSnakeView.processKey(4);
+
     }
 }
