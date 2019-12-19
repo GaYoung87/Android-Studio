@@ -24,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
     //                                        다른 패키지 + 상속       -> 허용
     //                                        다른 패키지              -> 허용 X
 
-    private SnakeView mSnakeView;
-    private TextView mTime;
-    private TextView mScore;
-    private TextView mSpeed;
+    private SnakeView snakeView;
+    private TextView time;
+    private TextView score;
+    private TextView speed;
 
     // 만약 private  static final String 이라면 값 선언 후 수정할 수 없음
     // static: 이를 사용하는데 필요한 인스턴스 없음
-    private static String ICICLE_KEY = "snake-view";
+    private static String ICICLE_KEY = "snake-view";;
 
     @Override
     // Activity는 수명 주기 존재
@@ -42,26 +42,27 @@ public class MainActivity extends AppCompatActivity {
         // super = 상위 클래스 -> 상위 클래스의 onCreate 메소드를 먼저 호출하여 먼저 실행하고, 오버라이드된 메소드를 처리 한다는 의미!
         super.onCreate(savedInstanceState);
 
-        // No Title Bar
+        // No Title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.activity_main);  // R파일, layout에 있는 파일, activity_main파일을 참조해 화면에 표시한다.
-        mTime = findViewById(R.id.time);  // 선택기로부터 시간 조사
-        mScore = findViewById(R.id.score);
-        mSpeed = findViewById(R.id.speed);
+        setContentView(R.layout.activity_main);  //   // R파일, layout에 있는 파일, activity_main파일을 참조해 화면에 표시한다.
+
+        time = findViewById(R.id.time);  // 선택기로부터 시간 조사
+        score = findViewById(R.id.score);
+        speed = findViewById(R.id.speed);
 
         // Snake게임에서
-        mSnakeView = (SnakeView) findViewById(R.id.snake);
-        mSnakeView.setTextView((TextView) findViewById(R.id.text));
+        snakeView = findViewById(R.id.snake);
+        snakeView.setTextView((TextView) findViewById(R.id.text));
         // 기본값 설정
-        mTime.setText("00 : 00 : 00");
-        mScore.setText("Score : " + 0);
-        mSpeed.setText("Delay : " + 0);
-        mSnakeView.setTextView(mTime, mScore, mSpeed);
+        time.setText("00 : 00 : 00");
+        score.setText("Score : " + 0);
+        speed.setText("Delay : " + 0);
+        snakeView.setTextView(time, score, speed);
 
         if (savedInstanceState == null) {
             // 이제 시작했다면, 새로운 게임을 준비
-            mSnakeView.setMode(SnakeView.READY);
+            snakeView.setMode(SnakeView.READY);
         } else {
             // 안드로이드 UI 가 아니기 때문에 복원하는 코드가 들어간다. 안드로이드 UI는 자동 복원됨.
             // savedInstanceState: 예전으로 돌아갈 수 있도록하는 것
@@ -71,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
             // map이 존재하면 상태 복원
             // 존재하지 않는다면 SnakeView를 멈추겠다??????????
             if (map != null) {
-                mSnakeView.restoreState(map);
+                snakeView.restoreState(map);
             } else {
-                mSnakeView.setMode(SnakeView.PAUSE);
+                snakeView.setMode(SnakeView.PAUSE);
             }
         }
     }
@@ -82,14 +83,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // 게임을 activity와 함께 멈추겠다
-        mSnakeView.setMode(SnakeView.PAUSE);
+        snakeView.setMode(SnakeView.PAUSE);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // 게임상태를 저장하겠다.
         super.onSaveInstanceState(outState);
-        outState.putBundle(ICICLE_KEY, mSnakeView.saveState());
+        outState.putBundle(ICICLE_KEY, snakeView.saveState());
     }
 
     /*
@@ -100,16 +101,18 @@ public class MainActivity extends AppCompatActivity {
      */
 
     public void onUpClicked(View v) {
-        mSnakeView.processKey(1);
+        snakeView.processKey(1);
     }
-    public void onDownClicked(View v) {
-        mSnakeView.processKey(2);
-    }
-    public void onRightClicked(View v) {
-        mSnakeView.processKey(3);
-    }
-    public void onLeftClicked(View v) {
-        mSnakeView.processKey(4);
 
+    public void onDownClicked(View v) {
+        snakeView.processKey(2);
+    }
+
+    public void onRightClicked(View v) {
+        snakeView.processKey(3);
+    }
+
+    public void onLeftClicked(View v) {
+        snakeView.processKey(4);
     }
 }

@@ -46,22 +46,24 @@ public class TileView extends View {
     // cutomview를 만드는게 attrs에 만들고, view라는 자바클래스를 getatt, init만들어야 custom
     // 내부에 있는 init
     // pygame - class Block 만드는 것과 동일
+    // getAttrs : attrs.xml 에 선언한 attribute 를 View 에 설정
     public TileView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
+    // getAttrs
     public TileView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    // initView : xml 파일 할당, 각각의 view 설정
     private void init(Context context, AttributeSet attrs) {
-        // a 설정 -> 무슨의미?
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TileView);
         // R.styleable.TileView_tileSize : attrs에서 온건가?
         // R.styleable.TileView_tileSize로 검색해서 mTileSize에 불러오는데, 없으면 24로 대체
-        mTileSize = a.getInt(R.styleable.TileView_tileSize, 24);
+        tileSize = a.getInt(R.styleable.TileView_tileSize, 24);
         // recycle: 가비지 컬렉터가 더이상 사용하지 않는 것을 회수해갈 수 있도록 명시적으로 호출
         // 꼭 적어줘야함!
         a.recycle();
@@ -74,28 +76,27 @@ public class TileView extends View {
      *
      * @param tilecount
      */
-    // 아까 설정 했던 타일 다시 설정!
+    // Bitmap 으로 초기 리스트 리셋
     public void resetTiles(int tilecount) {
-        mTileArray = new Bitmap[tilecount];
+        tileArray = new Bitmap[tilecount];
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        xTileCount = (int) Math.floor(w / tileSize);
+        yTileCount = (int) Math.floor(h / tileSize);
         // Math.floor: 소수점 이하 버림
         // Math.ceil: 소수점 이하 올림
         // Math.round: 소수점 이하 반올림
         // mX(Y)TileCount: 전체 너비에서 tilesize 나누기
-        mXTileCount = (int) Math.floor(w / mTileSize);
-        mYTileCount = (int) Math.floor(h / mTileSize);
 
         // 여백 -> 점수판 쓰려고 만들어진듯
-        mXOffset = ((w - (mTileSize * mXTileCount)) / 2);
-        mYOffset = ((h - (mTileSize * mYTileCount)) / 2);
+        xOffset = ((w - (tileSize * xTileCount)) / 2);
+        yOffset = ((h - (tileSize * yTileCount)) / 2);
 
-        mTileGrid = new int[mXTileCount][mYTileCount];
+        tileGrid = new int[xTileCount][yTileCount];
         clearTiles();
     }
-
     /**
      * Function to set the specified Drawable as the tile for a particular integer key.
      * 특정한 Drawable을 Bitmap
@@ -103,23 +104,24 @@ public class TileView extends View {
      * @param key
      * @param tile
      */
+    // Tile 그리기
     public void loadTile(int key, Drawable tile) {
-        Bitmap bitmap = Bitmap.createBitmap(mTileSize, mTileSize, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.ARGB_8888);
+        // Drawable을 Bitmap의 canvas에 그린다. 그러면 Drawable이 Bitmap에 그려진다.
         Canvas canvas = new Canvas(bitmap);
-        // // Drawable을 Bitmap의 canvas에 그린다. 그러면 Drawable이 Bitmap에 그려진다.
-        tile.setBounds(0, 0, mTileSize, mTileSize);
+        tile.setBounds(0, 0, tileSize, tileSize);
         tile.draw(canvas);
 
-        mTileArray[key] = bitmap;
+        tileArray[key] = bitmap;
     }
 
     /**
      * Resets all tiles to 0 (empty)
-     *
      */
+    // Tile 초기화
     public void clearTiles() {
-        for (int x = 0; x < mXTileCount; x++) {
-            for (int y = 0; y < mYTileCount; y++) {
+        for (int x = 0; x < xTileCount; x++) {
+            for (int y = 0; y < yTileCount; y++) {
                 setTile(0, x, y);
             }
         }
@@ -135,23 +137,27 @@ public class TileView extends View {
      * @param x
      * @param y
      */
+    // 특정 타일 표시
     public void setTile(int tileindex, int x, int y) {
-        mTileGrid[x][y] = tileindex;
+        tileGrid[x][y] = tileindex;
     }
 
+    // canvas : 도화지, paint : 색연필
+    // 위에서 타일을 표시했기 때문에 이를 칠할 수 있음(loadTile)
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        for (int x = 0; x < mXTileCount; x += 1) {
-            for (int y = 0; y < mYTileCount; y += 1) {
-                if (mTileGrid[x][y] > 0) {
-                    canvas.drawBitmap(mTileArray[mTileGrid[x][y]],
-                            mXOffset + x * mTileSize,
-                            mYOffset + y * mTileSize,
-                            mPaint);
+        for (int x = 0; x < xTileCount; x += 1) {
+            for (int y = 0; y < yTileCount; y += 1) {
+                if (tileGrid[x][y] > 0) {
+                    canvas.drawBitmap(tileArray[tileGrid[x][y]],
+                            xOffset + x * tileSize,
+                            yOffset + y * tileSize,
+                            tilePaint);
                 }
             }
         }
 
     }
+
 }
