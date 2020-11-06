@@ -26,10 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="10"
-        android:progress="0" />
+        android:progress="6" />
 
     <SeekBar
-        android:id="@+id/seekBar3"
+        android:id="@+id/seekBar2"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,5 +40,17 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="값 가지고오기" />
+        android:text="값 가져오기" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1증가하기" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1감소하기" />
 </LinearLayout>
